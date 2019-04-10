@@ -11,5 +11,14 @@ class UserView(APIView):
 
     def get(self, request):
         users = UserModel.objects.all()
-        serializer = UserSerializer(users, many=True, only=('name', 'age'))
+        User_Serializer = UserSerializer.exclude('name')
+        serializer = User_Serializer(users, many=True)
+        return Response(serializer.data)
+
+
+class UserView2(APIView):
+
+    def get(self, request):
+        users = UserModel.objects.all()
+        serializer = UserSerializer(users, many=True)
         return Response(serializer.data)

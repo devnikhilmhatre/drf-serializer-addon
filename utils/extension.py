@@ -1,10 +1,26 @@
+from rest_framework.serializers import ModelSerializer
+
+
 class SerializerAddOn:
 
-    def __init__(self, *args, **kwargs):
-        try:
-            print('Add on')
-            only = kwargs.pop('only')
-            self.Meta.fields = only
-        except KeyError:
-            pass
-        return super().__init__(*args, **kwargs)
+    @classmethod
+    def only(cls, *args):
+
+        class InnerClass(ModelSerializer):
+
+            class Meta:
+                model = cls.Meta.model
+                fields = args
+
+        return InnerClass
+
+    @classmethod
+    def exclude(cls, *args):
+
+        class InnerClass(ModelSerializer):
+
+            class Meta:
+                model = cls.Meta.model
+                exclude = args
+
+        return InnerClass
